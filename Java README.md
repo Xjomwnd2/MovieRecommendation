@@ -1,32 +1,29 @@
 # Overview
+This project is a simple but comprehensive Movie Recommendation System written in Java. It demonstrates how core Java concepts — like classes, objects, collections, and algorithms — can be used to build a working system that helps users find movies they might enjoy. The program supports creating user profiles, rating movies, adding favorite genres, and generating personalized recommendations using different strategies like content-based, collaborative, popularity-based, and a hybrid approach.
+I built this project to deepen my practical Java skills, especially around handling data structures, implementing recommendation logic, and creating an interactive user experience through a console menu.
 
-{Important! Do not say in this section that this is college assignment. Talk about what you are trying to accomplish as a software engineer to further your learning.}
-
-{Provide a description of the software that you wrote to demonstrate the Java language.}
-
-{Describe your purpose for writing this software.}
-
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running and a walkthrough of the code. Focus should be on sharing what you learned about the language syntax.}
+# Software Demo Video
 
 [Software Demo Video](http://youtube.link.goes.here)
 
 # Development Environment
 
-{Describe the tools that you used to develop the software}
+IDE Used: IntelliJ IDEA and VS Code (tested on both)
 
-{Describe the programming language that you used and any libraries.}
+Programming Language: Java (JDK 17)
+
+Libraries Used: java.util.* and java.util.stream.Collectors for collections, filtering, and processing data.
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
-
-- [Web Site Name](http://url.link.goes.here)
-- [Web Site Name](http://url.link.goes.here)
+- [GeeksforGeeks: for reference on Java collections and algorithms.](https://www.geeksforgeeks.org/)
+- [Java API Documentation: to look up syntax and class details.](https://docs.oracle.com/en/java/javase/17/docs/api/index.html)
+- [Stack Overflow: to troubleshoot small bugs and learn best practices.](https://stackoverflow.com/questions)
 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
+- Split the classes into separate files for better structure and maintainability.
 
-- Item 1
-- Item 2
-- Item 3
+- Add persistent data storage so user preferences and ratings can be saved and loaded.
+
+- Implement a simple GUI version for a more user-friendly experience.
