@@ -16,9 +16,9 @@ Libraries Used: java.util.* and java.util.stream.Collectors for collections, fil
 
 # Useful Websites
 
-- [GeeksforGeeks: for reference on Java collections and algorithms.](https://www.geeksforgeeks.org/)
-- [Java API Documentation: to look up syntax and class details.](https://docs.oracle.com/en/java/javase/17/docs/api/index.html)
-- [Stack Overflow: to troubleshoot small bugs and learn best practices.](https://stackoverflow.com/questions)
+- [GeeksforGeeks - for reference on Java collections and algorithms.](https://www.geeksforgeeks.org/)
+- [Java API Documentation - to look up syntax and class details.](https://docs.oracle.com/en/java/javase/17/docs/api/index.html)
+- [Stack Overflow - to troubleshoot small bugs and learn best practices.](https://stackoverflow.com/questions)
 
 # Future Work
 
