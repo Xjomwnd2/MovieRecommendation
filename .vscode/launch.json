@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Main - Movie Recommendation",
+            "request": "launch",
+            "mainClass": "com.movierecommendation.Main",
+            "projectName": "MovieRecommendation",
+            "env": {
+                "DB_HOST": "localhost",
+                "DB_PORT": "5432", 
+                "DB_NAME": "movie_recommendation",
+                "DB_USER": "${env:DB_USER}",
+                "DB_PASSWORD": "${env:DB_PASSWORD}"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
+            "name": "Database Test",
+            "request": "launch",
+            "mainClass": "com.movierecommendation.test.DatabaseTest",
+            "projectName": "MovieRecommendation",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
+            "name": "Movie Service Test",
+            "request": "launch",
+            "mainClass": "com.movierecommendation.service.MovieService",
+            "projectName": "MovieRecommendation"
+        }
+    ]
+}
