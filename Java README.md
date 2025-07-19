@@ -6,9 +6,12 @@ I built this project to deepen my practical Java skills, especially around handl
 
 [Software Demo Video](http://youtube.link.goes.here)
 
-- To Run the Program: javac MovieRecommendationSystem.java
-                      java MovieRecommendationSystem
-  OR Just: java MovieRecommendationSystem
+- To Run the Program type at the terminal:
+    
+    javac MovieRecommendationSystem.java
+    java MovieRecommendationSystem
+    
+    OR Just: java MovieRecommendationSystem
 # Development Environment
 
 IDE Used: IntelliJ IDEA and VS Code (tested on both)
