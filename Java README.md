@@ -12,6 +12,7 @@ I built this project to deepen my practical Java skills, especially around handl
     
     java MovieRecommendationSystem
     OR Just: 
+    java MovieRecommendationSystem
 # Development Environment
 
 IDE Used: IntelliJ IDEA and VS Code (tested on both)
