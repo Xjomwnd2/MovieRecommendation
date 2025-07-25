@@ -6,8 +6,6 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.sql.*;
 import java.util.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class MovieWebAPI {
     private static final int PORT = 5500;
@@ -192,40 +190,55 @@ public class MovieWebAPI {
                 // Get user's favorite genres
                 List<String> favoriteGenres = getUserFavoriteGenres(conn, userId);
                 
-                // Get user's watched movies
-                Set<Integer> watchedMovies = getUserWatchedMovies(conn, userId);
-                
-                // Get recommendations based on favorite genres
-                String query = """
-                    SELECT DISTINCT m.* FROM movies m 
-                    WHERE m.genre = ANY(?) 
-                    AND m.id NOT IN (
-                        SELECT movie_id FROM user_movie_ratings WHERE user_id = ?
-                    )
-                    ORDER BY m.rating DESC 
-                    LIMIT ?
-                """;
-                
-                try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                    Array genreArray = conn.createArrayOf("VARCHAR", favoriteGenres.toArray());
-                    pstmt.setArray(1, genreArray);
-                    pstmt.setInt(2, userId);
-                    pstmt.setInt(3, limit);
+                if (favoriteGenres.isEmpty()) {
+                    // If no favorite genres, recommend popular movies
+                    String query = """
+                        SELECT DISTINCT m.* FROM movies m 
+                        WHERE m.id NOT IN (
+                            SELECT movie_id FROM user_movie_ratings WHERE user_id = ?
+                        )
+                        ORDER BY m.rating DESC 
+                        LIMIT ?
+                    """;
                     
-                    try (ResultSet rs = pstmt.executeQuery()) {
-                        boolean first = true;
-                        while (rs.next()) {
-                            if (!first) json.append(",");
-                            json.append("{")
-                                .append("\"id\":").append(rs.getInt("id")).append(",")
-                                .append("\"title\":\"").append(escapeJson(rs.getString("title"))).append("\",")
-                                .append("\"genre\":\"").append(escapeJson(rs.getString("genre"))).append("\",")
-                                .append("\"director\":\"").append(escapeJson(rs.getString("director"))).append("\",")
-                                .append("\"year\":").append(rs.getInt("year")).append(",")
-                                .append("\"rating\":").append(rs.getDouble("rating")).append(",")
-                                .append("\"description\":\"").append(escapeJson(rs.getString("description"))).append("\"")
-                                .append("}");
-                            first = false;
+                    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                        pstmt.setInt(1, userId);
+                        pstmt.setInt(2, limit);
+                        
+                        try (ResultSet rs = pstmt.executeQuery()) {
+                            boolean first = true;
+                            while (rs.next()) {
+                                if (!first) json.append(",");
+                                appendMovieJSON(json, rs);
+                                first = false;
+                            }
+                        }
+                    }
+                } else {
+                    // Recommend based on favorite genres
+                    String query = """
+                        SELECT DISTINCT m.* FROM movies m 
+                        WHERE m.genre = ANY(?) 
+                        AND m.id NOT IN (
+                            SELECT movie_id FROM user_movie_ratings WHERE user_id = ?
+                        )
+                        ORDER BY m.rating DESC 
+                        LIMIT ?
+                    """;
+                    
+                    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                        Array genreArray = conn.createArrayOf("VARCHAR", favoriteGenres.toArray());
+                        pstmt.setArray(1, genreArray);
+                        pstmt.setInt(2, userId);
+                        pstmt.setInt(3, limit);
+                        
+                        try (ResultSet rs = pstmt.executeQuery()) {
+                            boolean first = true;
+                            while (rs.next()) {
+                                if (!first) json.append(",");
+                                appendMovieJSON(json, rs);
+                                first = false;
+                            }
                         }
                     }
                 }
@@ -235,6 +248,18 @@ public class MovieWebAPI {
             
             json.append("]");
             return json.toString();
+        }
+        
+        private void appendMovieJSON(StringBuilder json, ResultSet rs) throws SQLException {
+            json.append("{")
+                .append("\"id\":").append(rs.getInt("id")).append(",")
+                .append("\"title\":\"").append(escapeJson(rs.getString("title"))).append("\",")
+                .append("\"genre\":\"").append(escapeJson(rs.getString("genre"))).append("\",")
+                .append("\"director\":\"").append(escapeJson(rs.getString("director"))).append("\",")
+                .append("\"year\":").append(rs.getInt("year")).append(",")
+                .append("\"rating\":").append(rs.getDouble("rating")).append(",")
+                .append("\"description\":\"").append(escapeJson(rs.getString("description"))).append("\"")
+                .append("}");
         }
         
         private List<String> getUserFavoriteGenres(Connection conn, int userId) throws SQLException {
@@ -249,20 +274,6 @@ public class MovieWebAPI {
                 }
             }
             return genres;
-        }
-        
-        private Set<Integer> getUserWatchedMovies(Connection conn, int userId) throws SQLException {
-            Set<Integer> movies = new HashSet<>();
-            String query = "SELECT movie_id FROM user_movie_ratings WHERE user_id = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setInt(1, userId);
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    while (rs.next()) {
-                        movies.add(rs.getInt("movie_id"));
-                    }
-                }
-            }
-            return movies;
         }
     }
     
