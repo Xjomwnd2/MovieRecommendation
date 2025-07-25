@@ -5,7 +5,7 @@ import java.util.*;
 public class DatabaseConnection {
     private static final String URL = "jdbc:postgresql://localhost:5432/movie_db";
     private static final String USERNAME = "postgres"; // Change to your PostgreSQL username
-    private static final String PASSWORD = "your_password"; // Change to your PostgreSQL password
+    private static final String PASSWORD = "Huruma@2025"; // Change to your PostgreSQL password
     
     private static Connection connection;
     
