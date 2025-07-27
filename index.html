@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Recommendation System</title>
+  <style>
+    /* [Your full CSS from earlier remains unchanged] */
+    /* For brevity, I'll keep it exactly the same — style is already beautiful! */
+    /* Paste your full CSS code here or leave as is if using the one you already have */
+    /* Only the movie card changed slightly (we added the Watch Trailer button) */
+     * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        select, input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .movie-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .movie-poster {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .movie-info {
+            padding: 20px;
+        }
+
+        .movie-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .movie-year {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .movie-rating {
+            display: flex;
+            align-items: center;
+            color: #f39c12;
+            font-weight: 600;
+        }
+
+        .movie-genre {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .movie-director {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+
+        .movie-description {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.9em;
+        }
+
+        .stats {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stats h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .no-movies {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .filter-section {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎬 Movie Recommendation System</h1>
+      <p class="subtitle">Discover your next favorite movie</p>
+    </header>
+
+    <div class="stats">
+      <h3>📊 Movie Database Stats</h3>
+      <p id="movieCount">Loading movies...</p>
+    </div>
+
+    <div class="controls">
+      <div class="filter-section">
+        <div class="filter-group">
+          <label for="genreFilter">🎭 Genre:</label>
+          <select id="genreFilter">
+            <option value="">All Genres</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="directorFilter">🎬 Director:</label>
+          <select id="directorFilter">
+            <option value="">All Directors</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="yearStart">📅 Year From:</label>
+          <input type="number" id="yearStart" placeholder="e.g., 2000" min="1900" max="2024" />
+        </div>
+
+        <div class="filter-group">
+          <label for="yearEnd">📅 Year To:</label>
+          <input type="number" id="yearEnd" placeholder="e.g., 2024" min="1900" max="2024" />
+        </div>
+
+        <div class="filter-group">
+          <label for="minRating">⭐ Min Rating:</label>
+          <input type="number" id="minRating" placeholder="e.g., 7.0" min="0" max="10" step="0.1" />
+        </div>
+      </div>
+
+      <button class="search-btn" onclick="filterMovies()">🔍 Search Movies</button>
+    </div>
+
+    <div class="movies-grid" id="moviesGrid"></div>
+
+    <div class="no-movies" id="noMovies" style="display: none;">
+      <p>No movies found matching your criteria. Try adjusting your filters!</p>
+    </div>
+  </div>
+
+  <script>
+    const movies = [
+      {
+        id: 1,
+        title: "The Shawshank Redemption",
+        genre: "Drama",
+        director: "Frank Darabont",
+        year: 1994,
+        rating: 9.3,
+        description: "Two imprisoned men bond over a number of years...",
+        youtubeUrl: "https://www.youtube.com/watch?v=NmzuHjWmXOc"
+      },
+      {
+        id: 2,
+        title: "The Godfather",
+        genre: "Crime",
+        director: "Francis Ford Coppola",
+        year: 1972,
+        rating: 9.2,
+        description: "The aging patriarch of an organized crime dynasty...",
+        youtubeUrl: "https://www.youtube.com/watch?v=sY1S34973zA"
+      },
+      {
+        id: 3,
+        title: "The Dark Knight",
+        genre: "Action",
+        director: "Christopher Nolan",
+        year: 2008,
+        rating: 9.0,
+        description: "When the menace known as the Joker wreaks havoc...",
+        youtubeUrl: "https://www.youtube.com/watch?v=EXeTwQWrcwY"
+      },
+      {
+        id: 4,
+        title: "Pulp Fiction",
+        genre: "Crime",
+        director: "Quentin Tarantino",
+        year: 1994,
+        rating: 8.9,
+        description: "The lives of two mob hitmen, a boxer, a gangster...",
+        youtubeUrl: "https://www.youtube.com/watch?v=s7EdQ4FqbhY"
+      },
+      {
+        id: 5,
+        title: "Forrest Gump",
+        genre: "Drama",
+        director: "Robert Zemeckis",
+        year: 1994,
+        rating: 8.8,
+        description: "The presidencies of Kennedy and Johnson through the eyes...",
+        youtubeUrl: "https://www.youtube.com/watch?v=bLvqoHBptjg"
+      },
+      {
+        id: 6,
+        title: "Inception",
+        genre: "Sci-Fi",
+        director: "Christopher Nolan",
+        year: 2010,
+        rating: 8.8,
+        description: "A thief who steals corporate secrets through dream-sharing...",
+        youtubeUrl: "https://www.youtube.com/watch?v=YoHD9XEInc0"
+      },
+      {
+        id: 7,
+        title: "The Matrix",
+        genre: "Sci-Fi",
+        director: "The Wachowskis",
+        year: 1999,
+        rating: 8.7,
+        description: "A computer hacker learns from mysterious rebels...",
+        youtubeUrl: "https://www.youtube.com/watch?v=vKQi3bBA1y8"
+      },
+      {
+        id: 8,
+        title: "Goodfellas",
+        genre: "Crime",
+        director: "Martin Scorsese",
+        year: 1990,
+        rating: 8.7,
+        description: "The story of Henry Hill and his life in the mob...",
+        youtubeUrl: "https://www.youtube.com/watch?v=2ilzidi_J8Q"
+      },
+      {
+        id: 9,
+        title: "Interstellar",
+        genre: "Sci-Fi",
+        director: "Christopher Nolan",
+        year: 2014,
+        rating: 8.6,
+        description: "A team of explorers travel through a wormhole in space...",
+        youtubeUrl: "https://www.youtube.com/watch?v=zSWdZVtXT7E"
+      },
+      {
+        id: 10,
+        title: "The Lord of the Rings: The Fellowship of the Ring",
+        genre: "Fantasy",
+        director: "Peter Jackson",
+        year: 2001,
+        rating: 8.8,
+        description: "A meek Hobbit and eight companions set out to destroy the One Ring...",
+        youtubeUrl: "https://www.youtube.com/watch?v=V75dMMIW2B4"
+      }
+    ];
+
+    let filteredMovies = [...movies];
+
+    function initializeFilters() {
+      const genres = [...new Set(movies.map(movie => movie.genre))];
+      const genreSelect = document.getElementById('genreFilter');
+      genres.forEach(genre => {
+        const option = document.createElement('option');
+        option.value = genre;
+        option.textContent = genre;
+        genreSelect.appendChild(option);
+      });
+
+      const directors = [...new Set(movies.map(movie => movie.director))];
+      const directorSelect = document.getElementById('directorFilter');
+      directors.forEach(director => {
+        const option = document.createElement('option');
+        option.value = director;
+        option.textContent = director;
+        directorSelect.appendChild(option);
+      });
+    }
+
+    function displayMovies(moviesToDisplay) {
+      const moviesGrid = document.getElementById('moviesGrid');
+      const noMovies = document.getElementById('noMovies');
+
+      if (moviesToDisplay.length === 0) {
+        moviesGrid.style.display = 'none';
+        noMovies.style.display = 'block';
+        return;
+      }
+
+      moviesGrid.style.display = 'grid';
+      noMovies.style.display = 'none';
+
+      moviesGrid.innerHTML = moviesToDisplay.map(movie => `
+        <div class="movie-card">
+          <div class="movie-poster">🎬</div>
+          <div class="movie-info">
+            <div class="movie-title">${movie.title}</div>
+            <div class="movie-meta">
+              <span class="movie-year">${movie.year}</span>
+              <span class="movie-rating">⭐ ${movie.rating}</span>
+            </div>
+            <div class="movie-genre">📂 ${movie.genre}</div>
+            <div class="movie-director">🎬 ${movie.director}</div>
+            <div class="movie-description">${movie.description}</div>
+            <a href="${movie.youtubeUrl}" target="_blank" class="search-btn" style="display:inline-block; margin-top:10px;">▶️ Watch Trailer</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterMovies() {
+      const genre = document.getElementById('genreFilter').value;
+      const director = document.getElementById('directorFilter').value;
+      const yearStart = parseInt(document.getElementById('yearStart').value) || 0;
+      const yearEnd = parseInt(document.getElementById('yearEnd').value) || 9999;
+      const minRating = parseFloat(document.getElementById('minRating').value) || 0;
+
+      filteredMovies = movies.filter(movie => {
+        return (!genre || movie.genre === genre) &&
+               (!director || movie.director === director) &&
+               (movie.year >= yearStart) &&
+               (movie.year <= yearEnd) &&
+               (movie.rating >= minRating);
+      });
+
+      displayMovies(filteredMovies);
+      updateStats();
+    }
+
+    function updateStats() {
+      const movieCount = document.getElementById('movieCount');
+      movieCount.textContent = `📽️ Showing ${filteredMovies.length} of ${movies.length} movies`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initializeFilters();
+      displayMovies(movies);
+      updateStats();
+    });
+  </script>
+</body>
+</html>
