@@ -13,6 +13,9 @@ I built this project to deepen my practical Java skills, especially around handl
     java MovieRecommendationSystem
     OR Just: 
     java MovieRecommendationSystem
+
+    java -cp "lib/postgresql-42.7.7.jar;." MovieRecommendationSystem
+
 # Development Environment
 
 IDE Used: IntelliJ IDEA and VS Code (tested on both)
