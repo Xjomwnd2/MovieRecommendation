@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Recommendation System</title>
+    <title>MovieTube - Watch Movies Online</title>
     <style>
         * {
             margin: 0;
@@ -12,272 +12,505 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0f0f0f;
+            color: #fff;
+            line-height: 1.4;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            color: white;
-        }
-
-        h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .controls {
-            background: rgba(255,255,255,0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-        }
-
-        .filter-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .filter-group {
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 56px;
+            background-color: #212121;
+            z-index: 1000;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid #303030;
         }
 
-        label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #555;
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-right: 40px;
         }
 
-        select, input {
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .search-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 20px;
-        }
-
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .movies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .movie-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .movie-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
-
-        .movie-poster {
-            height: 200px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 2em;
-            font-weight: bold;
+            margin-right: 8px;
+            font-size: 18px;
         }
 
-        .movie-info {
+        .logo-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 640px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            height: 40px;
+            background-color: #121212;
+            border: 1px solid #303030;
+            border-radius: 2px 0 0 2px;
+            padding: 0 16px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #065fd4;
+        }
+
+        .search-btn {
+            width: 64px;
+            height: 40px;
+            background-color: #303030;
+            border: 1px solid #303030;
+            border-left: none;
+            border-radius: 0 2px 2px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-btn:hover {
+            background-color: #404040;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            width: 240px;
+            height: calc(100vh - 56px);
+            background-color: #212121;
+            overflow-y: auto;
+            padding: 12px 0;
+            z-index: 999;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 24px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+
+        .sidebar-item:hover {
+            background-color: #303030;
+        }
+
+        .sidebar-item.active {
+            background-color: #303030;
+        }
+
+        .sidebar-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-text {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            margin-top: 56px;
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .video-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #fff;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .video-rating {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background-color: rgba(255, 193, 7, 0.9);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .video-info {
+            display: flex;
+            gap: 12px;
+        }
+
+        .channel-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .video-details {
+            flex: 1;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: 4px;
+            color: #fff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            font-size: 14px;
+            color: #aaa;
+            line-height: 1.3;
+        }
+
+        .video-meta span {
+            margin-right: 8px;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            background-color: #303030;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 32px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .filter-chip:hover {
+            background-color: #404040;
+        }
+
+        .filter-chip.active {
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* Video Player Modal */
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-player {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #212121;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .player-video {
+            width: 100%;
+            height: 60vh;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            color: #fff;
+        }
+
+        .player-info {
             padding: 20px;
         }
 
-        .movie-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #333;
+        .player-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
         }
 
-        .movie-meta {
+        .player-details {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
-        .movie-year {
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
+        .player-meta {
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            background-color: #303030;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
             border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
         }
 
-        .movie-rating {
+        .action-btn:hover {
+            background-color: #404040;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            color: #f39c12;
-            font-weight: 600;
+            justify-content: center;
         }
 
-        .movie-genre {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 8px;
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .movie-director {
-            color: #888;
-            font-size: 0.9em;
-            margin-bottom: 12px;
-        }
-
-        .movie-description {
-            color: #666;
-            line-height: 1.5;
-            font-size: 0.9em;
-        }
-
-        .stats {
-            background: rgba(255,255,255,0.95);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .stats h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .no-movies {
-            text-align: center;
-            color: white;
-            font-size: 1.2em;
-            margin-top: 50px;
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
-            .filter-section {
+            .search-container {
+                display: none;
+            }
+            
+            .video-grid {
                 grid-template-columns: 1fr;
             }
             
-            h1 {
-                font-size: 2em;
-            }
-            
-            .movies-grid {
-                grid-template-columns: 1fr;
+            .filters {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎬 Movie Recommendation System</h1>
-            <p class="subtitle">Discover your next favorite movie</p>
-        </header>
-
-        <div class="stats">
-            <h3>📊 Movie Database Stats</h3>
-            <p id="movieCount">Loading movies...</p>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">🎬</div>
+            <div class="logo-text">MovieTube</div>
         </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search movies..." id="searchInput">
+            <button class="search-btn" onclick="searchMovies()">🔍</button>
+        </div>
+    </div>
 
-        <div class="controls">
-            <div class="filter-section">
-                <div class="filter-group">
-                    <label for="genreFilter">🎭 Genre:</label>
-                    <select id="genreFilter">
-                        <option value="">All Genres</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="directorFilter">🎬 Director:</label>
-                    <select id="directorFilter">
-                        <option value="">All Directors</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="yearStart">📅 Year From:</label>
-                    <input type="number" id="yearStart" placeholder="e.g., 2000" min="1900" max="2024">
-                </div>
-                
-                <div class="filter-group">
-                    <label for="yearEnd">📅 Year To:</label>
-                    <input type="number" id="yearEnd" placeholder="e.g., 2024" min="1900" max="2024">
-                </div>
-                
-                <div class="filter-group">
-                    <label for="minRating">⭐ Min Rating:</label>
-                    <input type="number" id="minRating" placeholder="e.g., 7.0" min="0" max="10" step="0.1">
-                </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-item active" onclick="showSection('home')">
+                <div class="sidebar-icon">🏠</div>
+                <div class="sidebar-text">Home</div>
             </div>
-            
-            <button class="search-btn" onclick="filterMovies()">🔍 Search Movies</button>
+            <div class="sidebar-item" onclick="showSection('trending')">
+                <div class="sidebar-icon">🔥</div>
+                <div class="sidebar-text">Trending</div>
+            </div>
+            <div class="sidebar-item" onclick="showSection('watchlater')">
+                <div class="sidebar-icon">⏰</div>
+                <div class="sidebar-text">Watch Later</div>
+            </div>
+        </div>
+        
+        <div class="sidebar-section">
+            <div class="sidebar-item" onclick="filterByGenre('Action')">
+                <div class="sidebar-icon">💥</div>
+                <div class="sidebar-text">Action</div>
+            </div>
+            <div class="sidebar-item" onclick="filterByGenre('Drama')">
+                <div class="sidebar-icon">🎭</div>
+                <div class="sidebar-text">Drama</div>
+            </div>
+            <div class="sidebar-item" onclick="filterByGenre('Comedy')">
+                <div class="sidebar-icon">😂</div>
+                <div class="sidebar-text">Comedy</div>
+            </div>
+            <div class="sidebar-item" onclick="filterByGenre('Sci-Fi')">
+                <div class="sidebar-icon">🚀</div>
+                <div class="sidebar-text">Sci-Fi</div>
+            </div>
+            <div class="sidebar-item" onclick="filterByGenre('Crime')">
+                <div class="sidebar-icon">🕵️</div>
+                <div class="sidebar-text">Crime</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="filters">
+            <button class="filter-chip active" onclick="filterMovies('all')">All</button>
+            <button class="filter-chip" onclick="filterMovies('newest')">Newest</button>
+            <button class="filter-chip" onclick="filterMovies('popular')">Most Popular</button>
+            <button class="filter-chip" onclick="filterMovies('highrated')">High Rated</button>
         </div>
 
-        <div class="movies-grid" id="moviesGrid">
+        <div class="section-title" id="sectionTitle">Recommended for you</div>
+        
+        <div class="video-grid" id="videoGrid">
             <!-- Movies will be loaded here -->
         </div>
+    </div>
 
-        <div class="no-movies" id="noMovies" style="display: none;">
-            <p>No movies found matching your criteria. Try adjusting your filters!</p>
+    <!-- Video Player Modal -->
+    <div class="video-modal" id="videoModal">
+        <button class="close-btn" onclick="closePlayer()">×</button>
+        <div class="video-player">
+            <div class="player-video" id="playerVideo">
+                ▶️
+            </div>
+            <div class="player-info">
+                <div class="player-title" id="playerTitle"></div>
+                <div class="player-details">
+                    <div class="player-meta" id="playerMeta"></div>
+                    <div class="player-actions">
+                        <button class="action-btn">👍 Like</button>
+                        <button class="action-btn">💾 Save</button>
+                        <button class="action-btn">📤 Share</button>
+                    </div>
+                </div>
+                <div id="playerDescription"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Sample movie data (based on your Java MovieRecommendationSystem)
+        // Enhanced movie data with YouTube-style metadata
         const movies = [
             {
                 id: 1,
@@ -286,7 +519,11 @@
                 director: "Frank Darabont",
                 year: 1994,
                 rating: 9.3,
-                description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency."
+                duration: "2:22:00",
+                views: "2.1M",
+                uploaded: "2 years ago",
+                description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+                channel: "Classic Cinema"
             },
             {
                 id: 2,
@@ -295,7 +532,11 @@
                 director: "Francis Ford Coppola",
                 year: 1972,
                 rating: 9.2,
-                description: "The aging patriarch of an organized crime dynasty transfers control to his reluctant son."
+                duration: "2:55:00",
+                views: "1.8M",
+                uploaded: "3 years ago",
+                description: "The aging patriarch of an organized crime dynasty transfers control to his reluctant son.",
+                channel: "Masterpiece Movies"
             },
             {
                 id: 3,
@@ -304,7 +545,11 @@
                 director: "Christopher Nolan",
                 year: 2008,
                 rating: 9.0,
-                description: "When the menace known as the Joker wreaks havoc on Gotham City, Batman must accept one of the greatest psychological tests."
+                duration: "2:32:00",
+                views: "5.2M",
+                uploaded: "1 year ago",
+                description: "When the menace known as the Joker wreaks havoc on Gotham City, Batman must accept one of the greatest psychological tests.",
+                channel: "Superhero Central"
             },
             {
                 id: 4,
@@ -313,7 +558,11 @@
                 director: "Quentin Tarantino",
                 year: 1994,
                 rating: 8.9,
-                description: "The lives of two mob hitmen, a boxer, a gangster and his wife intertwine in four tales of violence and redemption."
+                duration: "2:34:00",
+                views: "3.1M",
+                uploaded: "6 months ago",
+                description: "The lives of two mob hitmen, a boxer, a gangster and his wife intertwine in four tales of violence and redemption.",
+                channel: "Tarantino Films"
             },
             {
                 id: 5,
@@ -322,7 +571,11 @@
                 director: "Robert Zemeckis",
                 year: 1994,
                 rating: 8.8,
-                description: "The presidencies of Kennedy and Johnson through the eyes of an Alabama man with an IQ of 75."
+                duration: "2:22:00",
+                views: "4.3M",
+                uploaded: "8 months ago",
+                description: "The presidencies of Kennedy and Johnson through the eyes of an Alabama man with an IQ of 75.",
+                channel: "Feel Good Movies"
             },
             {
                 id: 6,
@@ -331,7 +584,11 @@
                 director: "Christopher Nolan",
                 year: 2010,
                 rating: 8.8,
-                description: "A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea."
+                duration: "2:28:00",
+                views: "6.7M",
+                uploaded: "3 months ago",
+                description: "A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea.",
+                channel: "Mind Bender Films"
             },
             {
                 id: 7,
@@ -340,7 +597,11 @@
                 director: "The Wachowskis",
                 year: 1999,
                 rating: 8.7,
-                description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers."
+                duration: "2:16:00",
+                views: "8.1M",
+                uploaded: "4 months ago",
+                description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+                channel: "Sci-Fi Classics"
             },
             {
                 id: 8,
@@ -349,125 +610,167 @@
                 director: "Martin Scorsese",
                 year: 1990,
                 rating: 8.7,
-                description: "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners."
-            },
-            {
-                id: 9,
-                title: "Interstellar",
-                genre: "Sci-Fi",
-                director: "Christopher Nolan",
-                year: 2014,
-                rating: 8.6,
-                description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival."
-            },
-            {
-                id: 10,
-                title: "The Lord of the Rings: The Fellowship of the Ring",
-                genre: "Fantasy",
-                director: "Peter Jackson",
-                year: 2001,
-                rating: 8.8,
-                description: "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring."
+                duration: "2:26:00",
+                views: "2.9M",
+                uploaded: "1 year ago",
+                description: "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners.",
+                channel: "Scorsese Collection"
             }
         ];
 
-        let filteredMovies = [...movies];
+        let currentMovies = [...movies];
+        let currentFilter = 'all';
 
-        function initializeFilters() {
-            // Populate genre filter
-            const genres = [...new Set(movies.map(movie => movie.genre))];
-            const genreSelect = document.getElementById('genreFilter');
-            genres.forEach(genre => {
-                const option = document.createElement('option');
-                option.value = genre;
-                option.textContent = genre;
-                genreSelect.appendChild(option);
-            });
-
-            // Populate director filter
-            const directors = [...new Set(movies.map(movie => movie.director))];
-            const directorSelect = document.getElementById('directorFilter');
-            directors.forEach(director => {
-                const option = document.createElement('option');
-                option.value = director;
-                option.textContent = director;
-                directorSelect.appendChild(option);
-            });
-        }
-
-        function displayMovies(moviesToDisplay) {
-            const moviesGrid = document.getElementById('moviesGrid');
-            const noMovies = document.getElementById('noMovies');
+        function displayMovies(moviesToShow) {
+            const videoGrid = document.getElementById('videoGrid');
             
-            if (moviesToDisplay.length === 0) {
-                moviesGrid.style.display = 'none';
-                noMovies.style.display = 'block';
-                return;
-            }
-            
-            moviesGrid.style.display = 'grid';
-            noMovies.style.display = 'none';
-            
-            moviesGrid.innerHTML = moviesToDisplay.map(movie => `
-                <div class="movie-card" onclick="showMovieDetails(${movie.id})">
-                    <div class="movie-poster">
+            videoGrid.innerHTML = moviesToShow.map(movie => `
+                <div class="video-card" onclick="playMovie(${movie.id})">
+                    <div class="video-thumbnail">
+                        <div class="video-duration">${movie.duration}</div>
+                        <div class="video-rating">⭐ ${movie.rating}</div>
                         🎬
                     </div>
-                    <div class="movie-info">
-                        <div class="movie-title">${movie.title}</div>
-                        <div class="movie-meta">
-                            <span class="movie-year">${movie.year}</span>
-                            <span class="movie-rating">⭐ ${movie.rating}</span>
+                    <div class="video-info">
+                        <div class="channel-avatar">🎭</div>
+                        <div class="video-details">
+                            <div class="video-title">${movie.title}</div>
+                            <div class="video-meta">
+                                <span>${movie.channel}</span><br>
+                                <span>${movie.views} views</span>
+                                <span>•</span>
+                                <span>${movie.uploaded}</span>
+                            </div>
                         </div>
-                        <div class="movie-genre">📂 ${movie.genre}</div>
-                        <div class="movie-director">🎬 ${movie.director}</div>
-                        <div class="movie-description">${movie.description}</div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filterMovies() {
-            const genre = document.getElementById('genreFilter').value;
-            const director = document.getElementById('directorFilter').value;
-            const yearStart = parseInt(document.getElementById('yearStart').value) || 0;
-            const yearEnd = parseInt(document.getElementById('yearEnd').value) || 9999;
-            const minRating = parseFloat(document.getElementById('minRating').value) || 0;
-
-            filteredMovies = movies.filter(movie => {
-                return (!genre || movie.genre === genre) &&
-                       (!director || movie.director === director) &&
-                       (movie.year >= yearStart) &&
-                       (movie.year <= yearEnd) &&
-                       (movie.rating >= minRating);
+        function filterMovies(filter) {
+            // Update filter chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
             });
+            event.target.classList.add('active');
 
+            currentFilter = filter;
+            let filteredMovies = [...movies];
+
+            switch(filter) {
+                case 'newest':
+                    filteredMovies.sort((a, b) => b.year - a.year);
+                    document.getElementById('sectionTitle').textContent = 'Newest Movies';
+                    break;
+                case 'popular':
+                    filteredMovies.sort((a, b) => parseFloat(b.views) - parseFloat(a.views));
+                    document.getElementById('sectionTitle').textContent = 'Most Popular';
+                    break;
+                case 'highrated':
+                    filteredMovies = filteredMovies.filter(movie => movie.rating >= 8.5);
+                    document.getElementById('sectionTitle').textContent = 'High Rated Movies';
+                    break;
+                default:
+                    document.getElementById('sectionTitle').textContent = 'Recommended for you';
+            }
+
+            currentMovies = filteredMovies;
             displayMovies(filteredMovies);
-            updateStats();
         }
 
-        function updateStats() {
-            const movieCount = document.getElementById('movieCount');
-            movieCount.textContent = `📽️ Showing ${filteredMovies.length} of ${movies.length} movies`;
+        function filterByGenre(genre) {
+            const filteredMovies = movies.filter(movie => movie.genre === genre);
+            currentMovies = filteredMovies;
+            document.getElementById('sectionTitle').textContent = `${genre} Movies`;
+            displayMovies(filteredMovies);
+
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
         }
 
-        function showMovieDetails(movieId) {
+        function searchMovies() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm === '') {
+                displayMovies(movies);
+                document.getElementById('sectionTitle').textContent = 'All Movies';
+                return;
+            }
+
+            const filteredMovies = movies.filter(movie => 
+                movie.title.toLowerCase().includes(searchTerm) ||
+                movie.director.toLowerCase().includes(searchTerm) ||
+                movie.genre.toLowerCase().includes(searchTerm)
+            );
+
+            currentMovies = filteredMovies;
+            document.getElementById('sectionTitle').textContent = `Search results for "${searchTerm}"`;
+            displayMovies(filteredMovies);
+        }
+
+        function playMovie(movieId) {
             const movie = movies.find(m => m.id === movieId);
-            if (movie) {
-                alert(`🎬 ${movie.title}\n\n` +
-                      `📅 Year: ${movie.year}\n` +
-                      `🎭 Genre: ${movie.genre}\n` +
-                      `🎬 Director: ${movie.director}\n` +
-                      `⭐ Rating: ${movie.rating}/10\n\n` +
-                      `📝 Description:\n${movie.description}`);
+            if (!movie) return;
+
+            document.getElementById('playerTitle').textContent = movie.title;
+            document.getElementById('playerMeta').innerHTML = `
+                ${movie.views} views • ${movie.uploaded} • ⭐ ${movie.rating}/10
+            `;
+            document.getElementById('playerDescription').innerHTML = `
+                <strong>${movie.director}</strong> • ${movie.year} • ${movie.genre}<br><br>
+                ${movie.description}
+            `;
+
+            document.getElementById('videoModal').style.display = 'flex';
+        }
+
+        function closePlayer() {
+            document.getElementById('videoModal').style.display = 'none';
+        }
+
+        function showSection(section) {
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            switch(section) {
+                case 'home':
+                    document.getElementById('sectionTitle').textContent = 'Recommended for you';
+                    displayMovies(movies);
+                    break;
+                case 'trending':
+                    const trending = [...movies].sort((a, b) => parseFloat(b.views) - parseFloat(a.views));
+                    document.getElementById('sectionTitle').textContent = '🔥 Trending';
+                    displayMovies(trending);
+                    break;
+                case 'watchlater':
+                    document.getElementById('sectionTitle').textContent = '⏰ Watch Later';
+                    displayMovies(movies.slice(0, 3)); // Show subset for demo
+                    break;
             }
         }
 
-        // Initialize the page
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchMovies();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePlayer();
+            }
+        });
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            initializeFilters();
             displayMovies(movies);
-            updateStats();
         });
     </script>
 </body>
